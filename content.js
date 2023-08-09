@@ -60,7 +60,7 @@
             continue;
           }
 
-          positions[char.textContent].push(-1 * cellIndex);
+          positions[char.textContent].push(-1 * (cellIndex + 1));
         } else if (dataState.includes("correct")) {
           if (positions[char.textContent] === undefined) positions[char.textContent] = [];
           else if (positions[char.textContent].filter((position) => position < 0).length > 0)

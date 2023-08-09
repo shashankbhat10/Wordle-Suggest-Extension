@@ -28,13 +28,26 @@ getSuggestionButton.addEventListener("click", async () => {
   let words = list["list"];
   let pattern = ".....";
   for (let key in data["positions"]) {
-    pattern = pattern.substring(0, data["positions"][key][0]) + key + pattern.substring(data["positions"][key][0] + 1);
+    if (data["positions"][key][0] > 0)
+      pattern =
+        pattern.substring(0, data["positions"][key][0]) + key + pattern.substring(data["positions"][key][0] + 1);
   }
 
   words = words.filter((word) => word.match(pattern));
   if (constraints["absent"].length > 0) {
     let absentPattern = constraints["absent"].join("|");
     words = words.filter((word) => !word.match(absentPattern));
+  }
+
+  for (let key in data["positions"]) {
+    if (data["positions"][key][0] < 0) {
+      for (let index in data["positions"][key]) {
+        let position = data["positions"][key][index];
+        // console.log(Math.abs(position) - 1);
+        // console.log(data["notAllowed"][Math.abs(position) - 1]);
+        data["notAllowed"][Math.abs(position) - 1].push(key);
+      }
+    }
   }
 
   words = words.filter((word) => {
@@ -49,6 +62,8 @@ getSuggestionButton.addEventListener("click", async () => {
   let wordsList = null;
   if (words.length === 0) {
     wordsList = document.createElement("span");
+    wordsList.id = "suggested-words-list";
+    wordsList.classList.add("text-lg", "mt-2");
     wordsList.innerText = "No words available to suggest";
   }
   // else if (words.length <= 5) {
