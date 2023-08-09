@@ -100,7 +100,6 @@
       response(constraints);
     } else if (type === "getPosition") {
       const positions = getPositions(chars["absent"]);
-      console.log(positions);
       response(positions);
     }
   });
