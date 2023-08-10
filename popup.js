@@ -27,20 +27,28 @@ getSuggestionButton.addEventListener("click", async () => {
 
   let words = list["list"];
   let pattern = ".....";
+  console.log(data);
   for (let key in data["positions"]) {
-    if (data["positions"][key][0] > 0)
+    if (data["positions"][key][0] >= 0)
       pattern =
         pattern.substring(0, data["positions"][key][0]) + key + pattern.substring(data["positions"][key][0] + 1);
   }
 
+  console.log(pattern);
   words = words.filter((word) => word.match(pattern));
+  console.log("after pattern match");
+  console.log(words);
   if (constraints["absent"].length > 0) {
     let absentPattern = constraints["absent"].join("|");
     words = words.filter((word) => !word.match(absentPattern));
   }
 
+  let presentChars = [];
+
   for (let key in data["positions"]) {
     if (data["positions"][key][0] < 0) {
+      presentChars.push(key);
+
       for (let index in data["positions"][key]) {
         let position = data["positions"][key][index];
         // console.log(Math.abs(position) - 1);
@@ -49,6 +57,16 @@ getSuggestionButton.addEventListener("click", async () => {
       }
     }
   }
+
+  words = words.filter((word) => {
+    for (let index in presentChars) {
+      if (!word.includes(presentChars[index])) return false;
+    }
+    return true;
+    // word.match(presentPattern)
+  });
+  console.log("after present");
+  console.log(words);
 
   words = words.filter((word) => {
     for (let index = 0; index < 5; index++) {

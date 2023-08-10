@@ -43,9 +43,8 @@
     }
 
     let breakLoop = false;
-    for (let index = 0; index <= boardRowsArr.length; index++) {
+    for (let index = 0; index < boardRowsArr.length; index++) {
       let rowEl = boardRowsArr[index];
-
       for (let cellIndex = 0; cellIndex < rowEl.children.length; cellIndex++) {
         let char = rowEl.children[cellIndex].firstChild.firstChild;
         if (char === null) {
@@ -64,7 +63,7 @@
         } else if (dataState.includes("correct")) {
           if (positions[char.textContent] === undefined) positions[char.textContent] = [];
           else if (positions[char.textContent].filter((position) => position < 0).length > 0)
-            positions[char.textContent] = [cellIndex];
+            positions[char.textContent] = [];
           else if (positions[char.textContent].filter((position) => position > 0).length > 0) continue;
 
           positions[char.textContent].push(cellIndex);
@@ -88,6 +87,8 @@
       notAllowedArr.push(arr);
     }
 
+    console.log(positions);
+    console.log(notAllowedArr);
     let data = { positions: positions, notAllowed: notAllowedArr };
     return data;
   };
